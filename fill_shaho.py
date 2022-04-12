@@ -59,8 +59,7 @@ def fill_shaho(jygs, kysh):
     sheet['CV65'] = shutoku[4]
     sheet['CY65'] = shutoku[5]
 
-    gekyu = int(kysh.tin[0])
-    sheet['S74'] = gekyu*1000
+    sheet['S74'] = int(kysh.tin)*1000
 
     book.save('shaho_filled.xlsx')
 

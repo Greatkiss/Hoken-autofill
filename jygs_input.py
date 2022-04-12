@@ -12,7 +12,7 @@ class jygs:
         self.simei = self.name
         self.phone = [""]*3
 
-    def type_info(self):
+    def load_info(self):
         print("事業所の列数を入力(jygs_info.xlxsを参照)")
         n = int(input())
         book = xl.load_workbook("jygs_info.xlsx")

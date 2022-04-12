@@ -5,7 +5,8 @@ from selenium.webdriver.chrome import service as fs
 import mojimoji
 
 def fill_koho(jygs, kysh):
-    driver = webdriver.Chrome("/Users/kk/Documents/Others/Web_Auto_Fill/chromedriver")
+    #driver = webdriver.Chrome("/Users/kk/Documents/Others/Web_Auto_Fill/chromedriver")
+    driver = webdriver.Chrome()
     driver.get('https://hoken.hellowork.mhlw.go.jp/assist/001000.do?screenId=001000&action=koyohohiLicenceLink')
     term = driver.find_element_by_xpath('//*[@id="ID_form_1"]/table/tbody/tr')  #Check box
     term.click()
@@ -52,7 +53,7 @@ def fill_koho(jygs, kysh):
     form_10_1 = driver.find_element_by_xpath('//*[@id="ID_cmbChgnShiharaiNoTaiyo"]')
     form_10_2 = driver.find_element_by_xpath('//*[@id="ID_txtChgnChgnGetsugaku"]')
     form_10_1.send_keys("1")
-    form_10_2.send_keys(mojimoji.zen_to_han(kysh.tin[0]))
+    form_10_2.send_keys(mojimoji.zen_to_han(str(int(kysh.tin)*1000 + int(kysh.carfare))))
 
     form_11_1 = driver.find_element_by_xpath('//*[@id="ID_skkuStkYmdGG"]')
     form_11_2 = driver.find_element_by_xpath('//*[@id="ID_skkuStkYmdYY"]')
