@@ -1,5 +1,4 @@
 import pandas as pd
-import mojimoji
 from input_reconfirm import jygs_name_input, jygs_num_input, reconfirm, reconfirm_num, kysh_name_input, reconfirm_name, kysh_num_input, kysh_reconfirm_num
 import os
 
@@ -14,11 +13,11 @@ class kysh:
         self.getdate = [""]*4
         self.tin = [""]*2
         self.bikou = ""
+        self.kojin = ""
 
     def type_info(self):
         kubun =jygs_name_input("取得区分（1:新規、2:再取得）")
         kubun = reconfirm("取得区分（1:新規、2:再取得）", kubun)
-        mojimoji.zen_to_han(kubun)
         self.kubun = kubun
         if(kubun == "2"):
             num0, num1, num2=jygs_num_input("被保険者番号")
@@ -26,12 +25,14 @@ class kysh:
             if(len(num0)+len(num1)+len(num2) == 0):
                 bikou = jygs_name_input("備考-前職")
                 bikou = reconfirm("備考-前職",bikou)
-                mojimoji.han_to_zen(bikou)
                 self.bikou = bikou
             else:
                 self.hiho[0] = num0
                 self.hiho[1] = num1
                 self.hiho[2] = num2
+        kojin = jygs_name_input("個人番号")
+        kojin = reconfirm("個人番号", kojin)
+        self.kojin = kojin
 
         kana=kysh_name_input("ﾐｮｳｼﾞ ﾅﾏｴ")
         kana=reconfirm_name("ﾐｮｳｼﾞ ﾅﾏｴ", kana)
@@ -59,6 +60,6 @@ class kysh:
         self.getdate[2] = num2
         self.getdate[3] = num3
 
-        tingin=kysh_name_input("1 space 賃金（千円）")
-        tingin=reconfirm_name("1 space 賃金（千円）", tingin)
+        tingin=kysh_name_input("月給 space 交通費(千円)")
+        tingin=reconfirm_name("月給 space 交通費(千円)", tingin)
         self.tin = tingin

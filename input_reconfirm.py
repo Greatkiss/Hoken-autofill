@@ -40,7 +40,7 @@ def reconfirm_name(kind: str, hoge_l):
     print("the {0} is {1} {2}? (y/n)".format(kind, hoge_l[0], hoge_l[1]))
     ans = input()
     while(ans != 'y'):
-        hoge_l=jygs_num_input(kind)
+        hoge_l=kysh_name_input(kind)
         print("the {0}  is {1} {2}? (y/n)".format(kind, hoge_l[0], hoge_l[1]))
         ans = input()
     return hoge_l
