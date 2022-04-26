@@ -1,13 +1,15 @@
 import jygs_input
 import kysh_input
-import fill_koho 
-import fill_shaho
+from fill_koho import fill_koho_class as koho
+from fill_shaho import fill_shaho
 
 jygs = jygs_input.jygs()
 jygs.load_info()
 
+print("被保険者の列数を入力(kysh_info.xlxsを参照)")
+n = int(input())
 kysh = kysh_input.kysh()
-kysh.load_info()
-
-fill_shaho.fill_shaho(jygs, kysh)
-fill_koho.fill_koho(jygs, kysh)
+for i in range(n):
+    kysh.load_info(n+1)
+    koho.fill_koho(kysh,jygs)
+    fill_shaho(jygs, kysh)

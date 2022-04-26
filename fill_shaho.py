@@ -1,5 +1,33 @@
 import openpyxl as xl
 
+def fill_date(birth_l):
+    birth = [""]*6
+    l=""
+    if(int(birth_l[1]) < 10):
+        birth[0] = "0"
+        birth[1] = birth_l[1]
+    else:
+        bl=birth_l[1]
+        birth[0] = bl[0]
+        birth[1] = bl[1]
+
+    if(int(birth_l[2]) < 10):
+        birth[2] = "0"
+        birth[3] = birth_l[2]
+    else:
+        bl=birth_l[2]
+        birth[2] = bl[0]
+        birth[3] = bl[1]
+
+    if(int(birth_l[3]) < 10):
+        birth[4] = "0"
+        birth[5] = birth_l[3]
+    else:
+        bl=birth_l[3]
+        birth[4] = bl[0]
+        birth[5] = bl[1]
+    return birth
+    
 def fill_shaho(jygs, kysh):
     book = xl.load_workbook("shaho_temp.xlsx")
     sheet = book["Sheet1"]
@@ -17,7 +45,7 @@ def fill_shaho(jygs, kysh):
     sheet['BD8'] = jygs.shahonum[2]
     sheet['BH8'] = jygs.shahonum[3]
     sheet['BL8'] = jygs.shahonum[4]
-     
+    
     sheet['R17'] = jygs.postnum[0]
     sheet['AA17'] = jygs.postnum[1]
     sheet['N20'] = jygs.address
@@ -59,34 +87,6 @@ def fill_shaho(jygs, kysh):
     sheet['CV65'] = shutoku[4]
     sheet['CY65'] = shutoku[5]
 
-    sheet['S74'] = int(kysh.tin)*1000
+    sheet['S74'] = int(kysh.tin)*1000+int(kysh.carfare)
 
     book.save('shaho_filled.xlsx')
-
-def fill_date(birth_l):
-    birth = [""]*6
-    l=""
-    if(int(birth_l[1]) < 10):
-        birth[0] = "0"
-        birth[1] = birth_l[1]
-    else:
-        bl=birth_l[1]
-        birth[0] = bl[0]
-        birth[1] = bl[1]
-
-    if(int(birth_l[2]) < 10):
-        birth[2] = "0"
-        birth[3] = birth_l[2]
-    else:
-        bl=birth_l[2]
-        birth[2] = bl[0]
-        birth[3] = bl[1]
-
-    if(int(birth_l[3]) < 10):
-        birth[4] = "0"
-        birth[5] = birth_l[3]
-    else:
-        bl=birth_l[3]
-        birth[4] = bl[0]
-        birth[5] = bl[1]
-    return birth

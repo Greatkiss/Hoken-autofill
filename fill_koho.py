@@ -1,111 +1,128 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome import service as fs
+from bs4 import BeautifulSoup
+import requests
 import mojimoji
 
-def fill_koho(jygs, kysh):
-    #driver = webdriver.Chrome("/Users/kk/Documents/Others/Web_Auto_Fill/chromedriver")
-    driver = webdriver.Chrome()
-    driver.get('https://hoken.hellowork.mhlw.go.jp/assist/001000.do?screenId=001000&action=koyohohiLicenceLink')
-    term = driver.find_element_by_xpath('//*[@id="ID_form_1"]/table/tbody/tr')  #Check box
-    term.click()
-    terms = driver.find_element_by_xpath('//*[@id="ID_inputPrintButton"]')   #Open the input form
-    terms.click()
+class fill_koho_class:
+    @staticmethod
+    def fill_koho(kysh, jygs):
+        session = requests.session()
+        url_login = "https://hoken.hellowork.mhlw.go.jp/assist/001000.do?screenId=001000&action=koyohohiLicenceLink"
+        res = session.get(url_login)
+        res.raise_for_status()
+        response_cookie = res.cookies
+        #check box
+        info = {
+            "chkDoi": "1",
+            "inputPrintButton": "内容を入力して印刷",
+            "reportTypeHidden": "KOYOHOHILICENCE",
+            "inputHidden": "1",
+            "screenId": "001010",
+            "maba_vrbs": "commonDownload,inputPrintButton",
+        }
+        login_url = "https://hoken.hellowork.mhlw.go.jp/assist/001010.do"
+        response = session.post(login_url, data=info, cookies=response_cookie)
+        response.raise_for_status()
+        #data input
+        info_send={
+            "txtHhksNo1": mojimoji.zen_to_han(kysh.hiho[0]),
+            "txtHhksNo2": mojimoji.zen_to_han(kysh.hiho[1]),
+            "txtHhksNo3": mojimoji.zen_to_han(kysh.hiho[2]),
+            "cmbStk": kysh.kubun,
+            "txtFuriganaKatakana1": (mojimoji.zen_to_han(kysh.name_kana[0]) + ' ' + mojimoji.zen_to_han(kysh.name_kana[1])),
+            "txtHhksNameKnj": (mojimoji.han_to_zen(kysh.name_kanji[0]) + '　' + mojimoji.han_to_zen(kysh.name_kanji[1])),
+            "txtFuriganaKatakana2": "",
+            "txtHkgoNoNameKnj": "",
+            "cmbSeibetsu": kysh.sex,
+            "seinengappiGG": (mojimoji.zen_to_han(kysh.birth[0])),
+            "seinengappiYY": (mojimoji.zen_to_han(kysh.birth[1])),
+            "seinengappiMM": (mojimoji.zen_to_han(kysh.birth[2])),
+            "seinengappiDD": (mojimoji.zen_to_han(kysh.birth[3])),
+            "txtJgshNo1": (mojimoji.zen_to_han(jygs.kohonum[0])),
+            "txtJgshNo2": (mojimoji.zen_to_han(jygs.kohonum[1])),
+            "txtJgshNo3": (mojimoji.zen_to_han(jygs.kohonum[2])),
+            "cmbHhksToNattakotoNoGenin": "4",
+            "cmbChgnShiharaiNoTaiyo": "1",
+            "txtChgnChgnGetsugaku": str(int(kysh.tin)),
+            "skkuStkYmdGG": (mojimoji.zen_to_han(kysh.getdate[0])),
+            "skkuStkYmdYY": (mojimoji.zen_to_han(kysh.getdate[1])),
+            "skkuStkYmdMM": (mojimoji.zen_to_han(kysh.getdate[2])),
+            "skkuStkYmdDD": (mojimoji.zen_to_han(kysh.getdate[3])),
+            "cmbKoyoKeitai": "7",
+            "cmbSksu": "05",
+            "cmbShusyokuKeiro": "4",
+            "txt1ShuukanNoShoteiRodoJnJn": "40",
+            "txt1ShuukanNoShoteiRodoJnFun": "00",
+            "keiyakuKikanNoSdamStaGG": "",
+            "keiyakuKikanNoSdamStaYY": "",
+            "keiyakuKikanNoSdamStaMM": "",
+            "keiyakuKikanNoSdamStaDD": "",
+            "keiyakuKikanNoSdamEndGG": "",
+            "keiyakuKikanNoSdamEndYY": "",
+            "keiyakuKikanNoSdamEndMM": "",
+            "keiyakuKikanNoSdamEndDD": "",
+            "rdoKeiyakuKikanNoSdamJokoUmu": "",
+            "rdoKeiyakuKikanNoSdam": "2",
+            "txtJgshMei": (mojimoji.han_to_zen(jygs.name)),
+            "txtBiko": (mojimoji.han_to_zen(kysh.bikou)),
+            "txtHhksNameRomaji": "",
+            "txtZairyuCardNo": "",
+            "bikoZairyuKikanYY": "",
+            "bikoZairyuKikanMM": "",
+            "bikoZairyuKikanDD": "",
+            "rdoBikoSkkuGaiKyokaUmu": "",
+            "cmbHakenUkeoiShuroukbn": "",
+            "txtBikoKokuseki": "",
+            "txtBikoZairyuSkku": "",
+            "txtJgysJusho": (mojimoji.han_to_zen(jygs.address)),
+            "txtJgysName": (mojimoji.han_to_zen(jygs.name)),
+            "txtJgysTel1": (mojimoji.zen_to_han(jygs.phone[0])),
+            "txtJgysTel2": (mojimoji.zen_to_han(jygs.phone[1])),
+            "txtJgysTel3": (mojimoji.zen_to_han(jygs.phone[2])),
+            "todokedeYmdYY": "",
+            "todokedeYmdMM": "",
+            "todokedeYmdDD": "",
+            "txtShinseiSaki": "新宿",
+            "shakaiRomushiSkseYmdGG": "5",
+            "shakaiRomushiSkseYmdYY": "",
+            "shakaiRomushiSkseYmdMM": "",
+            "shakaiRomushiSkseYmdDD": "",
+            "txtShakaiRomushiDairiSha": "",
+            "txtShakaiRomushiName": "",
+            "txtShakaiRomushiTel1": "",
+            "txtShakaiRomushiTel2": "",
+            "txtShakaiRomushiTel3": "",
+            "commonDownload": "帳票作成",
+            "screenId": "001050",
+            "action": "",
+            "codeAssistType": "",
+            "codeAssistKind": "",
+            "codeAssistCode": "",
+            "codeAssistItemCode": "",
+            "codeAssistItemName": "",
+            "codeAssistDivide": "",
+            "maba_vrbs": "continueMakeButton,commonDownload",
+            "preCheckFlg": "false"
+        }
+        #print(info_send)
+        make_pdf_url = "https://hoken.hellowork.mhlw.go.jp/assist/001050.do"
+        response_cookie = response.cookies
+        res_file = session.post(make_pdf_url, data=info_send, cookies=response_cookie)
+        res_file.raise_for_status()
+        contentType = res_file.headers['Content-Type']
+        contentDisposition = res_file.headers['Content-Disposition']
+        ATTRIBUTE = 'filename='
+        fileName = contentDisposition[contentDisposition.find(ATTRIBUTE) + len(ATTRIBUTE):]
+        with open("name{}.pdf".format(kysh.name_kanji[0]), 'wb') as saveFile:
+                saveFile.write(res_file.content)
+        soup = BeautifulSoup(res_file.text,"html.parser")
 
-    form_2_1 = driver.find_element_by_xpath('//*[@id="ID_txtHhksNo1"]')
-    form_2_2 = driver.find_element_by_xpath('//*[@id="ID_txtHhksNo2"]')
-    form_2_3 = driver.find_element_by_xpath('//*[@id="ID_txtHhksNo3"]')
-    form_2_1.send_keys(mojimoji.zen_to_han(kysh.hiho[0]))
-    form_2_2.send_keys(mojimoji.zen_to_han(kysh.hiho[1]))
-    form_2_3.send_keys(mojimoji.zen_to_han(kysh.hiho[2]))
 
-    form_3 = driver.find_element_by_xpath('//*[@id="ID_cmbStk"]')
-    form_3.send_keys(kysh.kubun)
-
-    form_4_1 = driver.find_element_by_xpath('//*[@id="ID_txtFuriganaKatakana1"]')
-    form_4_2 = driver.find_element_by_xpath('//*[@id="ID_txtHhksNameKnj"]')
-    form_4_1.send_keys(mojimoji.zen_to_han(kysh.name_kana[0]) + ' ' + mojimoji.zen_to_han(kysh.name_kana[1]))
-    form_4_2.send_keys(mojimoji.zen_to_han(kysh.name_kanji[0]) + '　' + mojimoji.zen_to_han(kysh.name_kanji[1]))
-
-    form_6 = driver.find_element_by_xpath('//*[@id="ID_cmbSeibetsu"]')
-    form_6.send_keys(kysh.sex)
-
-    form_7_1 = driver.find_element_by_xpath('//*[@id="ID_seinengappiGG"]')
-    form_7_2 = driver.find_element_by_xpath('//*[@id="ID_seinengappiYY"]')
-    form_7_3 = driver.find_element_by_xpath('//*[@id="ID_seinengappiMM"]')
-    form_7_4 = driver.find_element_by_xpath('//*[@id="ID_seinengappiDD"]')
-    form_7_1.send_keys(mojimoji.zen_to_han(kysh.birth[0]))
-    form_7_2.send_keys(mojimoji.zen_to_han(kysh.birth[1]))
-    form_7_3.send_keys(mojimoji.zen_to_han(kysh.birth[2]))
-    form_7_4.send_keys(mojimoji.zen_to_han(kysh.birth[3]))
-
-    form_8_1 = driver.find_element_by_xpath('//*[@id="ID_txtJgshNo1"]')
-    form_8_2 = driver.find_element_by_xpath('//*[@id="ID_txtJgshNo2"]')
-    form_8_3 = driver.find_element_by_xpath('//*[@id="ID_txtJgshNo3"]')
-    form_8_1.send_keys(mojimoji.zen_to_han(jygs.kohonum[0]))
-    form_8_2.send_keys(mojimoji.zen_to_han(jygs.kohonum[1]))
-    form_8_3.send_keys(mojimoji.zen_to_han(jygs.kohonum[2]))
-
-    form_9 = driver.find_element_by_xpath('//*[@id="ID_cmbHhksToNattakotoNoGenin"]')
-    form_9.send_keys('2')
-
-    form_10_1 = driver.find_element_by_xpath('//*[@id="ID_cmbChgnShiharaiNoTaiyo"]')
-    form_10_2 = driver.find_element_by_xpath('//*[@id="ID_txtChgnChgnGetsugaku"]')
-    form_10_1.send_keys("1")
-    form_10_2.send_keys(mojimoji.zen_to_han(str(int(kysh.tin)*1000 + int(kysh.carfare))))
-
-    form_11_1 = driver.find_element_by_xpath('//*[@id="ID_skkuStkYmdGG"]')
-    form_11_2 = driver.find_element_by_xpath('//*[@id="ID_skkuStkYmdYY"]')
-    form_11_3 = driver.find_element_by_xpath('//*[@id="ID_skkuStkYmdMM"]')
-    form_11_4 = driver.find_element_by_xpath('//*[@id="ID_skkuStkYmdDD"]')
-    form_11_1.send_keys(mojimoji.zen_to_han(kysh.getdate[0]))
-    form_11_2.send_keys(mojimoji.zen_to_han(kysh.getdate[1]))
-    form_11_3.send_keys(mojimoji.zen_to_han(kysh.getdate[2]))
-    form_11_4.send_keys(mojimoji.zen_to_han(kysh.getdate[3]))
-
-    form_12 = driver.find_element_by_xpath('//*[@id="ID_cmbKoyoKeitai"]')
-    form_12.send_keys('7')
-
-    form_13 = driver.find_element_by_xpath('//*[@id="ID_cmbKoyoKeitai"]')
-    form_13.send_keys('7')
-
-    form_14 = driver.find_element_by_xpath('//*[@id="ID_cmbShusyokuKeiro"]')
-    form_14.send_keys('4')
-
-    form_15_1 = driver.find_element_by_xpath('//*[@id="ID_txt1ShuukanNoShoteiRodoJnJn"]')
-    form_15_2 = driver.find_element_by_xpath('//*[@id="ID_txt1ShuukanNoShoteiRodoJnFun"]')
-    form_15_1.send_keys('40')
-    form_15_2.send_keys('00')
-
-    form_16_2 = driver.find_element_by_xpath('//*[@id="ID_LrdoKeiyakuKikanNoSdam2"]')
-    form_16_2.click()
-
-    form_jimusho = driver.find_element_by_xpath('//*[@id="ID_txtJgshMei"]')
-    form_jimusho.send_keys(mojimoji.han_to_zen(jygs.name))
-
-    form_bikou = driver.find_element_by_xpath('//*[@id="ID_txtBiko"]')
-    form_bikou.send_keys(mojimoji.han_to_zen(kysh.bikou))
-
-    form_jgys_jusho = driver.find_element_by_xpath('//*[@id="ID_txtJgysJusho"]')
-    form_jgys_jusho.send_keys(mojimoji.han_to_zen(jygs.address))
-
-    form_jigyosho_simei = driver.find_element_by_xpath('//*[@id="ID_txtJgysName"]')
-    form_jigyosho_simei.send_keys(mojimoji.han_to_zen(jygs.simei))
-
-    form_jigyosho_phone_1 = driver.find_element_by_xpath('//*[@id="ID_txtJgysTel1"]')
-    form_jigyosho_phone_2 = driver.find_element_by_xpath('//*[@id="ID_txtJgysTel2"]')
-    form_jigyosho_phone_3 = driver.find_element_by_xpath('//*[@id="ID_txtJgysTel3"]')
-    form_jigyosho_phone_1.send_keys(mojimoji.zen_to_han(jygs.phone[0]))
-    form_jigyosho_phone_2.send_keys(mojimoji.zen_to_han(jygs.phone[1]))
-    form_jigyosho_phone_3.send_keys(mojimoji.zen_to_han(jygs.phone[2]))
-
-    form_sinseisaki= driver.find_element_by_xpath('//*[@id="ID_txtShinseiSaki"]')
-    form_sinseisaki.send_keys('新宿')
-
-    term = driver.find_element_by_xpath('//*[@id="ID_commonDownload"]')  #Check box
-    term.click()
-    print("終わったらtype「1」 ")
-    a = input()
-    if(a == 1):
-        driver.close
+import jygs_input
+import kysh_input
+jygs = jygs_input.jygs()
+jygs.load_info()
+print("被保険者の列数を入力(kysh_info.xlxsを参照)")
+n = int(input())
+kysh = kysh_input.kysh()
+kysh.load_info(n)
+fill_koho_class.fill_koho(kysh,jygs)

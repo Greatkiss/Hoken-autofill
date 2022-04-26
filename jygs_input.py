@@ -1,4 +1,4 @@
-from input_reconfirm import jygs_name_input, jygs_num_input, reconfirm, reconfirm_num
+#from NotUsing.input_reconfirm import jygs_name_input, jygs_num_input, reconfirm, reconfirm_num
 import openpyxl as xl
 
 class jygs:
