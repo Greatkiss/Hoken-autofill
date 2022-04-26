@@ -110,19 +110,17 @@ class fill_koho_class:
         res_file.raise_for_status()
         contentType = res_file.headers['Content-Type']
         contentDisposition = res_file.headers['Content-Disposition']
-        ATTRIBUTE = 'filename='
-        fileName = contentDisposition[contentDisposition.find(ATTRIBUTE) + len(ATTRIBUTE):]
         with open("name{}.pdf".format(kysh.name_kanji[0]), 'wb') as saveFile:
                 saveFile.write(res_file.content)
         soup = BeautifulSoup(res_file.text,"html.parser")
 
 
-import jygs_input
-import kysh_input
-jygs = jygs_input.jygs()
-jygs.load_info()
-print("被保険者の列数を入力(kysh_info.xlxsを参照)")
-n = int(input())
-kysh = kysh_input.kysh()
-kysh.load_info(n)
-fill_koho_class.fill_koho(kysh,jygs)
+#import jygs_input
+#import kysh_input
+#jygs = jygs_input.jygs()
+#jygs.load_info()
+#print("被保険者の列数を入力(kysh_info.xlxsを参照)")
+#n = int(input())
+#kysh = kysh_input.kysh()
+#kysh.load_info(n)
+#fill_koho_class.fill_koho(kysh,jygs)
