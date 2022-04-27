@@ -5,7 +5,7 @@ def fill_date(birth_l):
     l=""
     if(int(birth_l[1]) < 10):
         birth[0] = "0"
-        birth[1] = birth_l[1]
+        birth[1] = birth_l[1][1]
     else:
         bl=birth_l[1]
         birth[0] = bl[0]
@@ -13,7 +13,7 @@ def fill_date(birth_l):
 
     if(int(birth_l[2]) < 10):
         birth[2] = "0"
-        birth[3] = birth_l[2]
+        birth[3] = birth_l[2][1]
     else:
         bl=birth_l[2]
         birth[2] = bl[0]
@@ -21,7 +21,7 @@ def fill_date(birth_l):
 
     if(int(birth_l[3]) < 10):
         birth[4] = "0"
-        birth[5] = birth_l[3]
+        birth[5] = birth_l[3][1]
     else:
         bl=birth_l[3]
         birth[4] = bl[0]
@@ -89,4 +89,4 @@ def fill_shaho(jygs, kysh):
 
     sheet['S74'] = int(kysh.tin)*1000+int(kysh.carfare)
 
-    book.save('shaho_filled.xlsx')
+    book.save('取得届_{}.xlsx'.format(kysh.name_kanji[0]))

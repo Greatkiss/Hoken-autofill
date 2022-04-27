@@ -6,10 +6,10 @@ from fill_shaho import fill_shaho
 jygs = jygs_input.jygs()
 jygs.load_info()
 
-print("被保険者の列数を入力(kysh_info.xlxsを参照)")
+print("被保険者の人数を入力(kysh_info.xlxsを参照)")
 n = int(input())
 kysh = kysh_input.kysh()
 for i in range(n):
-    kysh.load_info(n+1)
+    kysh.load_info(i+2)
     koho.fill_koho(kysh,jygs)
     fill_shaho(jygs, kysh)

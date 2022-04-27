@@ -108,12 +108,12 @@ class fill_koho_class:
         response_cookie = response.cookies
         res_file = session.post(make_pdf_url, data=info_send, cookies=response_cookie)
         res_file.raise_for_status()
-        contentType = res_file.headers['Content-Type']
+        #contentType = res_file.headers['Content-Type']
+        print(res_file.headers)
         contentDisposition = res_file.headers['Content-Disposition']
-        with open("name{}.pdf".format(kysh.name_kanji[0]), 'wb') as saveFile:
+        with open("雇用保険_{}.pdf".format(kysh.name_kanji[0]), 'wb') as saveFile:
                 saveFile.write(res_file.content)
-        soup = BeautifulSoup(res_file.text,"html.parser")
-
+        session.close()
 
 #import jygs_input
 #import kysh_input
