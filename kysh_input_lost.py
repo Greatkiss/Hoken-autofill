@@ -18,7 +18,7 @@ class kysh:
         self.kojin = ""
 
     def load_info(self,n):
-        book = xl.load_workbook("kysh_info.xlsx")
+        book = xl.load_workbook("kysh_info_lost.xlsx")
         sheet = book["Sheet1"]
         self.hiho = cell_to_list(sheet.cell(row=n,column=3).value)
         self.kojin = str(sheet.cell(row=n,column=4).value)
